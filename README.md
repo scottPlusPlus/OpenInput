@@ -1,4 +1,4 @@
-# IInput
+# OpenInput
 Toolset for recording and playing back user-input to Unity, great for integration testing. There are three main components:
 
 **ScreenInputService** should be your new source of Input information.  It replicates all of Unity's default behaviour in terms of calling your OnMouseEnter/OnMouseExit/etc methods on your monoBehaviors, as well as your OnPointerEnter/OnPointerExit/etc methods on your UI components.  However, it can be driven by either live or mock input.
