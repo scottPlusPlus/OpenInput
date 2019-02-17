@@ -1,19 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-namespace GGS.IInput
+namespace GGS.OpenInput
 {
     public delegate void PointerEventHandler(object sender, PointerEventData pointerEventData);
 
 
     public interface IScreenInput
     {
-        event PointerEventHandler PointerUp;
-        event PointerEventHandler PointerDown;
+        event System.Action Updated;
+
+        float Time { get; }
+        float DeltaTime { get; }
         Vector3 PointerPosition { get; }
+        bool IsPointerDown { get; }
     }
 
 
@@ -27,6 +28,7 @@ namespace GGS.IInput
     {
         void OnMouseUp();
     }
+
 
     public interface IMouseEnterHandler
     {

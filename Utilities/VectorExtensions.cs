@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-namespace GGS.IInput.Utils
+namespace GGS.OpenInput.Utils
 {
     public static class VectorExtensions
     {
@@ -37,13 +37,10 @@ namespace GGS.IInput.Utils
 
         public static bool IsNAN(this Vector3 v)
         {
-            if (v.x != v.x || v.y != v.y || v.z != v.z)
-            {
-                return true;
-            }
-            return false;
+            return float.IsNaN(v.x) || float.IsNaN(v.y) || float.IsNaN(v.z);
         }
         
+
         public static bool Approximately(this Vector3 v, Vector3 v2, float tolerance)
         {
             return v.x.Approximately(v2.x, tolerance) &&
@@ -51,9 +48,12 @@ namespace GGS.IInput.Utils
                     v.z.Approximately(v2.z, tolerance);
         }
 
+
         public static bool Approximately(this Vector3 v, Vector3 v2)
         {
             return v.Approximately(v2, Mathf.Epsilon);
         }
+
+
     }
 }

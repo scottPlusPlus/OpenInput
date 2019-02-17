@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-namespace GGS.IInput.Example
+
+namespace GGS.OpenInput.Example
 {
     public class ExampleGlue : MonoBehaviour
     {
@@ -14,14 +12,15 @@ namespace GGS.IInput.Example
         private ScreenInputService _screenInputService = new ScreenInputService();
 
         private bool _recording;
+        private bool _playing;
         private ScreenInputRecorder _recorder = new ScreenInputRecorder();
-        private ScreenInputMocker _playbackRunner;
+        private ScreenInputMocker _playbackRunner = new ScreenInputMocker();
 
 
         // Use this for initialization
         void Start()
         {
-            _unityInputWrapper.Setup(_screenInputService);
+            _screenInputService.SetDriver(_unityInputWrapper, false);
         }
 
         void Update()
@@ -48,13 +47,7 @@ namespace GGS.IInput.Example
             }
 
             //run
-            if (_recording)
-            {
-                _recorder.AppendFrame(Input.mousePosition,
-                    Input.GetMouseButton(0),
-                    Time.time);
-            }
-            if (_playbackRunner != null)
+            if (_playing)
             {
                 _playbackRunner.Update(Time.time);
             }
@@ -67,7 +60,7 @@ namespace GGS.IInput.Example
             {
                 Debug.LogWarning("Was already recording");
             }
-            _recorder.StartRecording(Time.time);
+            _recorder.StartRecording(_unityInputWrapper, Time.time);
             _recording = true;
         }
 
@@ -79,30 +72,34 @@ namespace GGS.IInput.Example
                 Debug.LogWarning("Was not recording.");
                 return;
             }
+            _recorder.StopRecording();
             _recording = false;
         }
 
 
         public void StartPlayBack()
         {
-            if (_playbackRunner != null)
+            if (_playing)
             {
                 Debug.LogWarning("Already in playback");
                 return;
             }
-            MockScreenInput msi = new MockScreenInput();
-            msi.Frames = _recorder.RecordedKeyFrames();
-            Debug.LogFormat("Start Playback with {0} frames", msi.Frames.Count);
-            _screenInputService.DrivePointers = true;
-            _playbackRunner = new ScreenInputMocker(_screenInputService, msi, PlayBackComplete, Time.time);
+            _playing = true;
+            MockScreenInput data = new MockScreenInput();
+            data.Frames = _recorder.RecordedKeyFrames();
+            Debug.LogFormat("Start Playback with {0} frames", data.Frames.Count);
+            _screenInputService.SetDriver(_playbackRunner, true);
+            _playbackRunner.PlayInput(data, PlayBackComplete, Time.time);
         }
+
 
         private void PlayBackComplete()
         {
             Debug.Log("Playback complete");
-            _screenInputService.DrivePointers = false;
-            _playbackRunner = null;
+            _screenInputService.SetDriver(_unityInputWrapper, false);
+            _playing = false;
         }
+        
 
     }
 }

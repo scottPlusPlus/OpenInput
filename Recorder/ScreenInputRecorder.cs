@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using GGS.IInput.Utils;
+using GGS.OpenInput.Utils;
 using UnityEngine;
 
 
-namespace GGS.IInput
+namespace GGS.OpenInput
 {
     public class ScreenInputRecorder
     {
@@ -14,18 +14,55 @@ namespace GGS.IInput
         private bool _currentClicking = false;
         private float _startTime;
 
+        private IScreenInput _driver;
 
-        public void StartRecording(float time)
+        public void StartRecording(IScreenInput driver, float time)
         {
+            if (driver == null)
+            {
+                Debug.LogError("Driver cannot be null");
+            }
+
             Clear();
+            _driver = driver;
+            _driver.Updated += OnUpdate;
             _startTime = time;
         }
 
 
-        public void AppendFrame(Vector3 position, bool clicking, float time)
+        public void StopRecording()
         {
-            time = time - _startTime;
+            if (_driver != null)
+            {
+                _driver.Updated -= OnUpdate;
+                _driver = null;
+            }
+        }
+
+
+        public List<MockScreenInput.Frame> RecordedKeyFrames()
+        {
+            return _recordedFrames;
+        }
+
+
+        public void Clear()
+        {
+            _recordedFrames.Clear();
+            _currentDirection = Vector3.zero;
+            _previousPos = Vector3.zero;
+            _currentOffset = Vector3.zero;
+            _currentClicking = false;
+        }
+
+
+        private void OnUpdate()
+        {
             bool isKeyFrame = false;
+            float time = _driver.Time - _startTime;
+            Vector3 position = _driver.PointerPosition;
+            bool clicking = _driver.IsPointerDown;
+
             _currentOffset = position - _previousPos;
             Vector3 dir = _currentOffset.Sign();
             if (dir != _currentDirection)
@@ -56,18 +93,7 @@ namespace GGS.IInput
             return newMove;
         }
 
-        public List<MockScreenInput.Frame> RecordedKeyFrames()
-        {
-            return _recordedFrames;
-        }
 
-        public void Clear()
-        {
-            _recordedFrames.Clear();
-            _currentDirection = Vector3.zero;
-            _previousPos = Vector3.zero;
-            _currentOffset = Vector3.zero;
-            _currentClicking = false;
-        }
+
     }
 }

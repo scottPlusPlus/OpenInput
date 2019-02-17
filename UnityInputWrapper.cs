@@ -1,40 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace GGS.IInput
+
+namespace GGS.OpenInput
 {
     /// <summary>
-    /// Wraps UnityEngine.Input to drive a ScreenInputService
+    /// Wraps UnityEngine.Input in an IScreenInput
     /// </summary>
-    public class UnityInputWrapper : MonoBehaviour
+    public class UnityInputWrapper : MonoBehaviour, IScreenInput
     {
-        private ScreenInputService _screenInput;
-        private Vector3 _currentPos;
+        public event System.Action Updated = delegate { };
+
+        public float Time { get; private set; }
+        public float DeltaTime { get; private set; }
+        public Vector3 PointerPosition { get; private set; }
+        public bool IsPointerDown { get; private set; }
 
 
-        public void Setup(ScreenInputService screenInput)
+        //called by Unity via Reflection
+        private void Update()
         {
-            _screenInput = screenInput;
-        }
+            PointerPosition = Input.mousePosition;
+            IsPointerDown = Input.GetMouseButtonDown(0);
+            Time = UnityEngine.Time.time;
+            DeltaTime = UnityEngine.Time.deltaTime;
 
-
-        void Update()
-        {
-            if (Input.mousePosition != _currentPos)
-            {
-                _screenInput.SetPosition(Input.mousePosition);
-            }
-            _screenInput.Update();
-            if (Input.GetMouseButtonDown(0))
-            {
-                _screenInput.SetPointerDown();
-            }
-            if (Input.GetMouseButtonUp(0))
-            {
-                _screenInput.SetPointerUp();
-            }
-            _currentPos = Input.mousePosition;
+            Updated.Invoke();
         }
 
     }

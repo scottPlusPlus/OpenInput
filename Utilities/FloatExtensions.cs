@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-namespace GGS.IInput.Utils
+
+namespace GGS.OpenInput.Utils
 {
     public static class FloatExtensions
     {
@@ -25,6 +26,7 @@ namespace GGS.IInput.Utils
         {
             return f.Approximately(f2, Mathf.Epsilon);
         }
+
     }
 }
 

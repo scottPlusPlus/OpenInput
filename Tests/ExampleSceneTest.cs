@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GGS.IInput.Example;
+using GGS.OpenInput.Example;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +9,7 @@ using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 
-namespace GGS.IInput.Test
+namespace GGS.OpenInput.Test
 {
     public class ExampleSceneTest
     {
@@ -58,5 +58,7 @@ namespace GGS.IInput.Test
 
             Assert.AreEqual(1, button.GetComponent<ClickCounter>().ClickCount);
         }
+
+
     }
 }

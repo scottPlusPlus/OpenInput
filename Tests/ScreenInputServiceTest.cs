@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using GGS.IInput.Example;
+using GGS.OpenInput.Example;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
 
-namespace GGS.IInput.Test
+namespace GGS.OpenInput.Test
 {
     public class ScreenInputServiceTest
     {
@@ -14,6 +14,7 @@ namespace GGS.IInput.Test
         [UnityTest]
         public IEnumerator ClicksOnClickableExamples()
         {
+            Debug.Log("UnityTest: ClickOnClickableExamples");
             Camera camera = new GameObject().AddComponent<Camera>();
             camera.transform.position = new Vector3(0f, 1f, -10f);
 

@@ -1,15 +1,21 @@
-using System.Collections.Generic;
-using System.Linq;
-using GGS.IInput.Utils;
+using GGS.OpenInput.Utils;
 using UnityEngine;
 
 
-namespace GGS.IInput
+namespace GGS.OpenInput
 {
-    public class ScreenInputMocker
+    public class ScreenInputMocker : IScreenInput
     {
+        #region Interface
 
-        private ScreenInputService _screenInput;
+        public event System.Action Updated = delegate { };
+   
+        public float Time { get; private set; }
+        public float DeltaTime { get; private set; }
+        public bool IsPointerDown { get; private set; }
+        public Vector3 PointerPosition { get; private set; }
+
+        #endregion
 
         private MockScreenInput _data;
         private MockScreenInput.Frame _previousFrame;
@@ -20,30 +26,19 @@ namespace GGS.IInput
         private float _startTime;
 
 
-        //NOTE: you'd probably want to wrap this in an IPromise or an IEnumerator, depending on your needs
-        public ScreenInputMocker(ScreenInputService inputService, MockScreenInput mockInput, System.Action playCompleteCallback, float startTime)
+        public void PlayInput(MockScreenInput mockInput, System.Action playCompleteCallback, float startTime)
         {
-            //validation
-            if (inputService == null)
-            {
-                Debug.LogError("Input Service null");
-                return;
-            }
             if (mockInput == null)
             {
-                Debug.LogError("Mock Input null");
+                Debug.LogError("Mock Input cannot be null");
                 return;
             }
 
-            _screenInput = inputService;
             _data = mockInput.Clone();
             _startTime = startTime;
-            _previousFrame = new MockScreenInput.Frame();
+            _nextFrame = new MockScreenInput.Frame(0f, Vector2.zero, false);
             _playCompleteCallback = playCompleteCallback;
             _running = true;
-
-            _screenInput.SetPointerDown();
-            _screenInput.SetPointerUp();
 
             StartNextMove();
         }
@@ -52,10 +47,12 @@ namespace GGS.IInput
         public void Kill()
         {
             _running = false;
-            _playCompleteCallback.Invoke();
-            _playCompleteCallback = null;
-            _screenInput = null;
             _data = null;
+            if (_playCompleteCallback != null)
+            {
+                _playCompleteCallback.Invoke();
+                _playCompleteCallback = null;
+            }
             Debug.Log("Finished playing input");
         }
 
@@ -67,44 +64,38 @@ namespace GGS.IInput
                 Kill();
                 return;
             }
-            MockScreenInput.Frame nextFrame = _data.Frames[0];
-            _data.Frames.RemoveAt(0);
-
-            if (nextFrame.Clicking)
-            {
-                _screenInput.SetPointerDown();
-            }
-            else
-            {
-                _screenInput.SetPointerUp();
-            }
-
-            if (_screenInput == null)
-            {
-                Debug.LogError("Screen input null");
-            }
             _previousFrame = _nextFrame;
-            _nextFrame = nextFrame;
+            _nextFrame = _data.Frames[0];
+            _data.Frames.RemoveAt(0);
+            IsPointerDown = _nextFrame.Clicking;
         }
 
 
         public void Update(float time)
         {
-            if (_running)
+            if (!_running)
             {
-                time = time - _startTime;
-                float progress = time.ReMap(_previousFrame.Time, _nextFrame.Time, 0, 1);
-                Vector3 pos = Vector3.Lerp(_previousFrame.Position, _nextFrame.Position, progress);
-                
-                if (!pos.IsNAN())
-                {
-                    _screenInput.SetPosition(pos);
-                }
-                if (progress >= 1 || _previousFrame.Time >= _nextFrame.Time)
-                {
-                    StartNextMove();
-                }
+                return;
             }
+
+            DeltaTime = time - Time;
+            Time = time;
+
+            time = time - _startTime;
+            float progress = time.ReMap(_previousFrame.Time, _nextFrame.Time, 0, 1);
+            progress = Mathf.Clamp01(progress);
+            if (float.IsNaN(progress)) //will usually be NAN if starting time of sequence == 0;
+            {
+                progress = 1;
+            }
+
+            PointerPosition = Vector2.Lerp(_previousFrame.Position, _nextFrame.Position, progress);
+            if (progress >= 1 || _previousFrame.Time >= _nextFrame.Time)
+            {
+                StartNextMove();
+            }
+
+            Updated.Invoke();
         }
 
     }

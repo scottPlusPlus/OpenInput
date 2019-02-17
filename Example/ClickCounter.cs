@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using GGS.IInput.Example;
+using GGS.OpenInput.Example;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ClickCounter : MonoBehaviour {
 
     public int ClickCount { get; private set; }
+    public ClickableExample ex;
 
     void Awake()
     {
         ClickableExample clickable = GetComponent<ClickableExample>();    
         if (clickable != null)
         {
+            ex = clickable;
             clickable.Clicked += Click;
         }
 
@@ -27,6 +29,7 @@ public class ClickCounter : MonoBehaviour {
     public void Click ()
     {
         ClickCount++;
+        Debug.Log("ClickCount == " + ClickCount);
     }
 	
 }

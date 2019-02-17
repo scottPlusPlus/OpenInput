@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-namespace GGS.IInput
+namespace GGS.OpenInput
 {
     [System.Serializable]
     public class MockScreenInput
@@ -11,10 +11,10 @@ namespace GGS.IInput
         public struct Frame
         {
             public float Time;
-            public Vector3 Position;
+            public Vector2 Position;
             public bool Clicking;
 
-            public Frame(float time, Vector3 pos, bool clicking)
+            public Frame(float time, Vector2 pos, bool clicking)
             {
                 this.Time = time;
                 this.Position = pos;

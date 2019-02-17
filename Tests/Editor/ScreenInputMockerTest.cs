@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GGS.IInput.Utils;
+using GGS.OpenInput.Utils;
 using NUnit.Framework;
 using UnityEngine;
 
 
-namespace GGS.IInput.Test
+namespace GGS.OpenInput.Test
 {
     public class ScreenInputMockerTest
     {
@@ -25,15 +24,15 @@ namespace GGS.IInput.Test
             testState.RunToEndInEditor();
 
             Vector3 state = testState.ScreenInputService.PointerPosition;
-            Vector3 data = testState.Input.Frames.Last().Position;
-            Assert.AreEqual(true, state.Approximately(data));
+            Vector3 data = testState.Data.Frames.Last().Position;
+            Assert.AreEqual(true, state.Approximately(data, 0.001f));
 
             testState = new TestState(MockInputB());
             testState.RunToEndInEditor();
 
             state = testState.ScreenInputService.PointerPosition;
-            data = testState.Input.Frames.Last().Position;
-            Assert.AreEqual(true, state.Approximately(data));
+            data = testState.Data.Frames.Last().Position;
+            Assert.AreEqual(true, state.Approximately(data, 0.001f));
         }
 
 

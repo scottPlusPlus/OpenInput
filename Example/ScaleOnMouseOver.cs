@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GGS.IInput.Example
+namespace GGS.OpenInput.Example
 {
     public class ScaleOnMouseOver : MonoBehaviour, IMouseEnterHandler, IMouseExitHandler
     {
