@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GGS.OpenInput.Example;
+using GGS.OpenInput.Test;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +9,7 @@ using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 
-namespace GGS.OpenInput.Test
+namespace GGS.OpenInput.Example.Test
 {
     public class ExampleSceneTest
     {
@@ -48,7 +48,7 @@ namespace GGS.OpenInput.Test
             mockInput.Frames.Add(new MockScreenInput.Frame(timeB + 0.1f, button.transform.position, true));
             mockInput.Frames.Add(new MockScreenInput.Frame(timeB + 0.2f, button.transform.position, false));
 
-            TestState test = new TestState(mockInput);
+            TestHelper test = new TestHelper(mockInput);
             yield return test.RunToEndInPlay();
 
             foreach (ClickableExample clickable in clickables)

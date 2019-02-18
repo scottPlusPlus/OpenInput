@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace GGS.OpenInput.Test
 {
-    public class TestState
+    public class TestHelper
     {
-        public TestState(MockScreenInput data)
+        public TestHelper(MockScreenInput data)
         {
             Data = data;
         }
 
-        public ScreenInputService ScreenInputService = new ScreenInputService();
-        public ScreenInputMocker MockInputRunner = new ScreenInputMocker();
+        public InputService ScreenInputService = new InputService();
+        public MockInputDriver MockInputRunner = new MockInputDriver();
         public MockScreenInput Data;
         public bool Complete;
 

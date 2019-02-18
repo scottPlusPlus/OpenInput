@@ -9,12 +9,12 @@ namespace GGS.OpenInput.Example
         [SerializeField] private KeyCode _toggleRecordKey;
         [SerializeField] private KeyCode _playbackKey;
 
-        private ScreenInputService _screenInputService = new ScreenInputService();
+        private InputService _screenInputService = new InputService();
 
         private bool _recording;
         private bool _playing;
-        private ScreenInputRecorder _recorder = new ScreenInputRecorder();
-        private ScreenInputMocker _playbackRunner = new ScreenInputMocker();
+        private InputRecorder _recorder = new InputRecorder();
+        private MockInputDriver _playbackRunner = new MockInputDriver();
 
 
         // Use this for initialization

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GGS.OpenInput
 {
-    public class ScreenInputMocker : IScreenInput
+    public class MockInputDriver : IInput
     {
         #region Interface
 

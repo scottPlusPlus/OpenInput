@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
 
-namespace GGS.OpenInput.Example
+namespace GGS.OpenInput.Test
 {
     [RequireComponent(typeof(Collider))]
-    public class ClickableExample : MonoBehaviour, IMouseDownHandler, IMouseUpHandler
+    public class TestClickable : MonoBehaviour, IMouseDownHandler, IMouseUpHandler
     {
         public event System.Action Clicked = delegate { };
-
+    
         private bool _down;
 
 

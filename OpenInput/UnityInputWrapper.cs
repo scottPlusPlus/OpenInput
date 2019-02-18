@@ -6,7 +6,7 @@ namespace GGS.OpenInput
     /// <summary>
     /// Wraps UnityEngine.Input in an IScreenInput
     /// </summary>
-    public class UnityInputWrapper : MonoBehaviour, IScreenInput
+    public class UnityInputWrapper : MonoBehaviour, IInput
     {
         public event System.Action Updated = delegate { };
 

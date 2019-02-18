@@ -13,7 +13,7 @@ namespace GGS.OpenInput
     /// then uses the input it provides to trigger colliders and UI elements in the scene
     /// calling OnMouseDown, OnPointerEnter, etc.
     /// </summary>
-    public class ScreenInputService : IScreenInput, IDisposable
+    public class InputService : IInput, IDisposable
     {
         #region Interface
 
@@ -28,7 +28,7 @@ namespace GGS.OpenInput
 
         #endregion
 
-        private IScreenInput _driver;
+        private IInput _driver;
 
         private Ray _ray;
         private RaycastHit _hit;
@@ -70,7 +70,7 @@ namespace GGS.OpenInput
         /// <param name="driver">IScreenInput that the ScreenInputService will wrap</param>
         /// <param name="driveColliders">Should the ScreenInputService make calls to colliders and UI elements in the scene
         /// (OnMouseDown, OnPointerEnter, etc)</param>
-        public void SetDriver(IScreenInput driver, bool driveColliders)
+        public void SetDriver(IInput driver, bool driveColliders)
         {
             if (_driver != null)
             {

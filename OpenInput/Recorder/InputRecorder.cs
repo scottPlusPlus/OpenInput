@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GGS.OpenInput
 {
-    public class ScreenInputRecorder
+    public class InputRecorder
     {
         private List<MockScreenInput.Frame> _recordedFrames = new List<MockScreenInput.Frame>();
         private Vector3 _currentDirection = Vector3.zero;
@@ -14,9 +14,9 @@ namespace GGS.OpenInput
         private bool _currentClicking = false;
         private float _startTime;
 
-        private IScreenInput _driver;
+        private IInput _driver;
 
-        public void StartRecording(IScreenInput driver, float time)
+        public void StartRecording(IInput driver, float time)
         {
             if (driver == null)
             {

@@ -7,7 +7,7 @@ namespace GGS.OpenInput
     public delegate void PointerEventHandler(object sender, PointerEventData pointerEventData);
 
 
-    public interface IScreenInput
+    public interface IInput
     {
         event System.Action Updated;
 

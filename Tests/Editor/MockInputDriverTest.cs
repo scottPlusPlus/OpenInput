@@ -7,27 +7,27 @@ using UnityEngine;
 
 namespace GGS.OpenInput.Test
 {
-    public class ScreenInputMockerTest
+    public class MockInputDriverTest
     {
         [Test]
-        public void MockInputRunnerCompletes()
+        public void MockInputDriver_WithSimpleData_Completes()
         {
-            TestState testState = new TestState(MockInputA());
+            TestHelper testState = new TestHelper(MockInputA());
             testState.RunToEndInEditor();
             Assert.AreEqual(true, testState.Complete);
         }
 
         [Test]
-        public void MockInputDrivesScreenInput()
+        public void MockInputDriver_WithSimpleData_DrivesInputService()
         {
-            TestState testState = new TestState(MockInputA());
+            TestHelper testState = new TestHelper(MockInputA());
             testState.RunToEndInEditor();
 
             Vector3 state = testState.ScreenInputService.PointerPosition;
             Vector3 data = testState.Data.Frames.Last().Position;
             Assert.AreEqual(true, state.Approximately(data, 0.001f));
 
-            testState = new TestState(MockInputB());
+            testState = new TestHelper(MockInputB());
             testState.RunToEndInEditor();
 
             state = testState.ScreenInputService.PointerPosition;

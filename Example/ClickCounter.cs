@@ -1,35 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using GGS.OpenInput.Example;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ClickCounter : MonoBehaviour {
 
-    public int ClickCount { get; private set; }
-    public ClickableExample ex;
-
-    void Awake()
+namespace GGS.OpenInput.Example
+{
+    public class ClickCounter : MonoBehaviour
     {
-        ClickableExample clickable = GetComponent<ClickableExample>();    
-        if (clickable != null)
+
+        public int ClickCount { get; private set; }
+
+        void Awake()
         {
-            ex = clickable;
-            clickable.Clicked += Click;
+            ClickableExample clickable = GetComponent<ClickableExample>();
+            if (clickable != null)
+            {
+                clickable.Clicked += Click;
+            }
+
+            Button button = GetComponent<Button>();
+            if (button != null)
+            {
+                button.onClick.AddListener(Click);
+            }
         }
 
-        Button button = GetComponent<Button>();
-        if (button != null)
+        // Use this for initialization
+        public void Click()
         {
-            button.onClick.AddListener(Click);
+            ClickCount++;
         }
-    }
 
-    // Use this for initialization
-    public void Click ()
-    {
-        ClickCount++;
-        Debug.Log("ClickCount == " + ClickCount);
     }
-	
 }
